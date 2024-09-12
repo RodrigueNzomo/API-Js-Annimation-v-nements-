@@ -1,0 +1,78 @@
+# Activer le module headers si nécessaire
+<IfModule mod_headers.c>
+
+    # Sécurité : Empêcher le navigateur de deviner le type MIME (protection contre certaines attaques XSS)
+    Header set X-Content-Type-Options "nosniff"
+
+    # Performances : Mettre en cache les fichiers statiques (JS, CSS, images) pendant un an
+    <FilesMatch "\.(js|css|png|jpg|gif|ico)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+
+</IfModule>
+
+# Compatibilité : Spécifier que les fichiers HTML doivent utiliser l'encodage UTF-8
+AddDefaultCharset UTF-8
+
+# Activer la compression pour améliorer les performances de transfert des fichiers (JS, CSS, HTML)
+<IfModule mod_deflate.c>
+    # Activer la compression pour les types de fichiers courants
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/atom+xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+
+    # Compression des polices
+    AddOutputFilterByType DEFLATE font/ttf
+    AddOutputFilterByType DEFLATE font/otf
+    AddOutputFilterByType DEFLATE font/eot
+    AddOutputFilterByType DEFLATE font/woff
+    AddOutputFilterByType DEFLATE font/woff2
+</IfModule>
+
+# Gérer les erreurs de cache-control
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType application/x-shockwave-flash "access plus 1 year"
+    ExpiresByType application/x-font-woff "access plus 1 year"
+    ExpiresByType application/x-font-ttf "access plus 1 year"
+    ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# Sécurité : Désactiver l'exécution de fichiers PHP dans certains dossiers sensibles
+<FilesMatch "\.(php|php5|php7)$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
+
+# Redirection vers HTTPS si disponible
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Réponse de sécurité : Activer la protection contre le clickjacking
+<IfModule mod_headers.c>
+    Header always append X-Frame-Options DENY
+</IfModule>
+
+# Améliorer la sécurité contre les attaques XSS et les injections de contenu
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# Empêcher l'affichage du répertoire (protection basique)
+Options -Indexes
