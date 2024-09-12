@@ -89,3 +89,14 @@ function animateBox(event) {
     animationBox.addEventListener(eventType, animateBox);
   }
 );
+// Explanation
+// In the refactored code, I have streamlined the animation function by creating a base configuration object, animationConfig, which contains common properties such as targets and duration. This reduces redundancy and enhances maintainability.
+
+// Key Changes:
+// Spread Operator: The use of the spread operator (...) allows us to easily extend the animationConfig object with specific properties for each event type, making the code cleaner and more concise.
+
+// Event Listener Addition: Instead of adding each event listener individually, I utilized an array of event types and the forEach method to iterate through them. This not only reduces code duplication but also makes it easier to manage the events in one place.
+
+// Console Warning: Changed the console log for unsupported events to console.warn for better clarity and to indicate that it is a warning rather than a regular log.
+
+// These changes enhance the readability and efficiency of the code while maintaining its original functionality. If you have any further questions or need additional modifications, feel free to ask!
