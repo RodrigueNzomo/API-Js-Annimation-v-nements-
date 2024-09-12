@@ -1,7 +1,7 @@
 // // Sélectionner la boîte d'animation
 // const animationBox = document.getElementById("animationBox");
 
-// // Fonction d'animation avec Anime.js pour divers événements
+// Fonction d'animation avec Anime.js pour divers événements
 // function animateBox(event) {
 //   switch (event.type) {
 //     case "click":
